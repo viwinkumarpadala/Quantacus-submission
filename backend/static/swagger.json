@@ -1,0 +1,221 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Viwin's application API Documentation",
+    "description": "This API allows you to interact with Wikipedia articles to retrieve section headings, paraphrased content, and summarized content.",
+    "contact": {
+      "name": "Viwin Kumar Padala",
+      "email": "viwinkumar.p20@iiits.in"
+    }
+  },
+  "paths": {
+    "/get_sections": {
+      "get": {
+        "summary": "Get section headings for a Wikipedia article",
+        "parameters": [
+          {
+            "name": "main_heading",
+            "in": "query",
+            "description": "The main heading of the Wikipedia article",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "sections": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/paraphrase_content": {
+      "post": {
+        "summary": "Generate paraphrased content for a section",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Request body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ParaphraseRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "paraphrased_content": {
+                  "type": "string",
+                  "description": "The paraphrased content"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/summarize_content": {
+      "post": {
+        "summary": "Generate summarized content for a section",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Request body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SummarizeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "summarized_content": {
+                  "type": "string",
+                  "description": "The summarized content"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get_content": {
+      "post": {
+        "summary": "Get content of a specific section",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Request body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ContentRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string",
+                  "description": "The content of the specific section"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ParaphraseRequest": {
+      "type": "object",
+      "properties": {
+        "main_heading": {
+          "type": "string",
+          "description": "The main heading of the Wikipedia article"
+        },
+        "section_heading": {
+          "type": "string",
+          "description": "The heading of the section to paraphrase"
+        }
+      },
+      "required": ["main_heading", "section_heading"]
+    },
+    "SummarizeRequest": {
+      "type": "object",
+      "properties": {
+        "main_heading": {
+          "type": "string",
+          "description": "The main heading of the Wikipedia article"
+        },
+        "section_heading": {
+          "type": "string",
+          "description": "The heading of the section to summarize"
+        }
+      },
+      "required": ["main_heading", "section_heading"]
+    },
+    "ContentRequest": {
+      "type": "object",
+      "properties": {
+        "main_heading": {
+          "type": "string",
+          "description": "The main heading of the Wikipedia article"
+        },
+        "section_heading": {
+          "type": "string",
+          "description": "The heading of the section to retrieve content from"
+        }
+      },
+      "required": ["main_heading", "section_heading"]
+    }
+  }
+}

@@ -1,3 +1,4 @@
+# Import statements
 from flask import Flask, request, jsonify
 import wikipediaapi
 from dotenv import load_dotenv
@@ -7,27 +8,41 @@ import json
 from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 
-# Load environment variables
+# loading the .env variables using dotenv
 load_dotenv()
 
-# Create a Flask application
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+openai.api_key = OPENAI_API_KEY
+
+# Create flask app
 app = Flask(__name__)
 CORS(app)
 
-# Initialize Wikipedia API
+# Using Wikipedia API 
 wiki = wikipediaapi.Wikipedia(
     language='en',
     extract_format=wikipediaapi.ExtractFormat.WIKI,
     user_agent='Viwin-Test'
 )
 
-# Set OpenAI API Key
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+# swagger documentation
+SWAGGER_URL = '/api/docs'
+API_URL = '/static/swagger.json'
 
-openai.api_key = OPENAI_API_KEY
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,  
+    API_URL,
+    config={  
+        'app_name': "Viwin's app docs"
+    },
+)
+
+app.register_blueprint(swaggerui_blueprint)
 
 
-# API Route 1: Get section headings for a given main heading
+# swagger documentation ends
+
+# API Route 1: Get all the section headings for a given main heading taken from the search query
 @app.route('/get_sections', methods=['GET'])
 def get_sections():
     main_heading = request.args.get('main_heading')
@@ -36,7 +51,7 @@ def get_sections():
     return jsonify({'sections': sections})
 
 
-# API Route 2: Generate paraphrased content for a given section
+# API Route 2: Generate paraphrased content for a given section using gpt 3.5 turbo api, main heading and section heading taken from request body
 @app.route('/paraphrase_content', methods=['POST'])
 def paraphrase_content():
     data = request.json
@@ -47,7 +62,7 @@ def paraphrase_content():
         page = wiki.page(main_heading)
         section = page.section_by_title(section_heading)
 
-        # Build formatted text recursively, handling nesting
+        # Build formatted text recursively, handling nesting, so that we are getting all the available content using wikipedia api
         def format_section(current_section, level=1):
             text = f"\n{'#' * level} {current_section.title}\n"
             text += current_section.text + "\n"
@@ -59,7 +74,7 @@ def paraphrase_content():
 
         formatted_text = format_section(section)
         
-        # Create JSON-formatted message content
+        # Create JSON-formatted message content for openai message request
         message_content = json.dumps({"text": formatted_text})
 
         # Create OpenAI ChatCompletion request
@@ -72,16 +87,17 @@ def paraphrase_content():
             ]
         )
 
-        # Extract the summarized text from the response
+        # Extract the summarized text from the response above
         paraphrased_text = response.choices[0].message.content
         paraphrased_content = paraphrased_text
         print(paraphrased_content)
+        
         return jsonify({'paraphrased_content': paraphrased_content})
 
     except Exception as e:
         return jsonify({'error': f"Error: {str(e)}"})
 
-# API Route 3: Generate summarized content for a given section
+# API Route 3: Generate summarized content for a given section using gpt 3.5 turbo api, main heading and section heading taken from request body
 @app.route('/summarize_content', methods=['POST'])
 def summarize_content():
     data = request.json
@@ -92,7 +108,7 @@ def summarize_content():
         page = wiki.page(main_heading)
         section = page.section_by_title(section_heading)
 
-        # Build formatted text recursively, handling nesting
+        # Build formatted text recursively, handling nesting, so that we are getting all the available content using wikipedia api
         def format_section(current_section, level=1):
             text = f"\n{'#' * level} {current_section.title}\n"
             text += current_section.text + "\n"
@@ -104,7 +120,7 @@ def summarize_content():
 
         formatted_text = format_section(section)
         
-        # Create JSON-formatted message content
+       # Create JSON-formatted message content for openai message request
         message_content = json.dumps({"text": formatted_text})
 
         # Create OpenAI ChatCompletion request
@@ -117,7 +133,7 @@ def summarize_content():
             ]
         )
 
-        # Extract the summarized text from the response
+        # Extract the summarized text from the response above
         summarized_text = response.choices[0].message.content
         summarized_content = summarized_text
         print(summarized_content)
@@ -127,7 +143,7 @@ def summarize_content():
         return jsonify({'error': f"Error: {str(e)}"})
 
 
-# Route to get the content of a specific section
+# API Route 4: Route to get the contents of a specific section using main heading and section heading taken from request body
 @app.route('/get_content', methods=['POST'])
 def get_content():
     data = request.json
@@ -138,11 +154,11 @@ def get_content():
 
     try:
         page = wiki.page(main_heading)
-        # print(page.text)
+        
         section = page.section_by_title(section_heading)
         
 
-        # Build formatted text recursively, handling nesting
+        # Build formatted text recursively, handling nesting, so that we are getting all the available content using wikipedia api
         def format_section(current_section, level=1):
             text = f"\n{'#' * level} {current_section.title}\n"
             text += current_section.text + "\n"
