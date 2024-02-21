@@ -114,3 +114,6 @@ git clone https://github.com/viwinkumarpadala/Quantacus-submission.git
 
 ## Author
 Padala Viwin Kumar
+
+## Note
+I am using Render for hosting my server, so it may take some time to load for the first time, as the server will be down everytime afetr 15 minutes of inactivity, so please reload and use it in that case.
