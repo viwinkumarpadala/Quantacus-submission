@@ -96,6 +96,9 @@ This route retrieves the Paraphrased content for a specific section of a Wikiped
 
 ## Steps to Use the Repository
 
+### Clone the repository
+git clone https://github.com/viwinkumarpadala/Quantacus-submission.git
+
 ### Backend
 
 1. Navigate to the backend directory: `cd quantacus-submission/backend`.
