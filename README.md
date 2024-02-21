@@ -43,7 +43,7 @@ The hosted server can be accessed [here](https://quantacus-submission.onrender.c
 
 This route retrieves section headings for a given Wikipedia article.
 
-- Route: `/get_sections?main_heading=Albert%20Einstein`
+- Route: `/get_sections?main_heading={Search parameter}`
 
 - output:
 ![alt text](image.png)
