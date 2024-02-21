@@ -4,12 +4,15 @@ from dotenv import load_dotenv
 import os
 import openai
 import json 
+from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint
 
 # Load environment variables
 load_dotenv()
 
 # Create a Flask application
 app = Flask(__name__)
+CORS(app)
 
 # Initialize Wikipedia API
 wiki = wikipediaapi.Wikipedia(
@@ -65,7 +68,7 @@ def paraphrase_content():
             response_format={"type": "json_object"},
             messages=[
                 {"role": "user", "content": message_content},
-                {"role": "system", "content": "Paraphrase the text. Include 'json' in the message."}  # Include 'json' in the system message
+                {"role": "system", "content": "Paraphrase the text and return in this format 'json':paraphrased_text"}  # Include 'json' in the system message
             ]
         )
 
@@ -110,7 +113,7 @@ def summarize_content():
             response_format={"type": "json_object"},
             messages=[
                 {"role": "user", "content": message_content},
-                {"role": "system", "content": "Summarize the text. Include 'json' in the message."}  # Include 'json' in the system message
+                {"role": "system", "content": "Summarize the text, in this format 'json':summary."}  # Include 'json' in the system message
             ]
         )
 
@@ -130,10 +133,14 @@ def get_content():
     data = request.json
     main_heading = data['main_heading']
     section_heading = data['section_heading']
+    print(main_heading)
+    print(section_heading)
 
     try:
         page = wiki.page(main_heading)
+        # print(page.text)
         section = page.section_by_title(section_heading)
+        
 
         # Build formatted text recursively, handling nesting
         def format_section(current_section, level=1):
@@ -146,8 +153,9 @@ def get_content():
             return text
 
         formatted_text = format_section(section)
+        # print(formatted_text)
 
-        return formatted_text
+        return jsonify({'content': formatted_text})
 
     except wikipediaapi.exceptions.DisambiguationError as e:
         return jsonify({'error': f"DisambiguationError: {e}"})
