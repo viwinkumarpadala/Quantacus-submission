@@ -46,7 +46,7 @@ This route retrieves section headings for a given Wikipedia article.
 - Route: `/get_sections?main_heading={Search parameter}`
 
 - output:
-![alt text](image.png)
+![image](https://github.com/viwinkumarpadala/Quantacus-submission/assets/89856949/99ae07cd-7da9-4882-bb2d-e1b54115b0c8)
 
 ### Get Content Route
 
@@ -61,7 +61,7 @@ This route retrieves content for a specific section of a Wikipedia article.
   }
 
 -output:
-![alt text](image-1.png)
+![image](https://github.com/viwinkumarpadala/Quantacus-submission/assets/89856949/eddfef3e-363e-4b71-bf51-22193f495dec)
 
 ### Get Summarised Content Route
 
@@ -76,7 +76,8 @@ This route retrieves the summary of content for a specific section of a Wikipedi
   }
 
 - output:
-![alt text](image-2.png)
+![image](https://github.com/viwinkumarpadala/Quantacus-submission/assets/89856949/274725a7-d7b7-4baa-87ae-96aae2e6967a)
+
 
 ### Get Paraphrased Content Route
 
@@ -91,7 +92,7 @@ This route retrieves the Paraphrased content for a specific section of a Wikiped
   }
 
 - output:
-![alt text](image-3.png)
+![image](https://github.com/viwinkumarpadala/Quantacus-submission/assets/89856949/f4228aea-4815-48a2-ae10-b15083f29707)
 
 
 ## Steps to Use the Repository
