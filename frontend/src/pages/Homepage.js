@@ -16,7 +16,7 @@ const Homepage = () => {
   const handleSearch = async () => {
     try {
       setLoadingSections(true);
-      const response = await fetch(`http://127.0.0.1:5000/get_sections?main_heading=${searchQuery}`);
+      const response = await fetch(`https://quantacus-submission.onrender.com/get_sections?main_heading=${searchQuery}`);
       const data = await response.json();
       setSections(data.sections);
       setLoadingSections(false);
@@ -32,7 +32,7 @@ const Homepage = () => {
     setLoadingParaphrasedContent(true);
 
     try {
-      const contentResponse = await fetch('http://127.0.0.1:5000/get_content', {
+      const contentResponse = await fetch('https://quantacus-submission.onrender.com/get_content', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -43,7 +43,7 @@ const Homepage = () => {
       setContent(contentData.content);
       setLoadingContent(false);
 
-      const summarizedResponse = await fetch('http://127.0.0.1:5000/summarize_content', {
+      const summarizedResponse = await fetch('https://quantacus-submission.onrender.com/summarize_content', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ const Homepage = () => {
       setSummarizedContent(summarizedText);
       setLoadingSummarizedContent(false);
 
-      const paraphrasedResponse = await fetch('http://127.0.0.1:5000/paraphrase_content', {
+      const paraphrasedResponse = await fetch('https://quantacus-submission.onrender.com/paraphrase_content', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
